@@ -61,9 +61,9 @@ public class Robot extends TimedRobot {
     input = new OI(driveStick, operator);
 
     List<Solenoid> solenoids = new ArrayList<Solenoid>();
+    solenoids.add(new Solenoid(PneumaticsModuleType.CTREPCM, 0));
     solenoids.add(new Solenoid(PneumaticsModuleType.CTREPCM, 1));
     solenoids.add(new Solenoid(PneumaticsModuleType.CTREPCM, 2));
-    solenoids.add(new Solenoid(PneumaticsModuleType.CTREPCM, 3));
     
     cannon = new Cannon(solenoids);
 
@@ -163,11 +163,11 @@ public class Robot extends TimedRobot {
     double axisTwo = input.driver.getRawAxis(2);
     
     if (axisOne == -1) {
-      this.cannon.fireSolenoid(2);
-    } else if (axisTwo == 1) {
       this.cannon.fireSolenoid(1);
+    } else if (axisTwo == 1) {
+      this.cannon.fireSolenoid(0);
     } else if (axisTwo == -1) {
-      this.cannon.fireSolenoid(3);
+      this.cannon.fireSolenoid(2);
     } else if (axisOne == 1) {
       this.cannon.fireAllSolenoids();
     }
