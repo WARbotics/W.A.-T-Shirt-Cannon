@@ -15,6 +15,7 @@ public class Cannon {
     */
     public Cannon(List<Solenoid> solenoidsToControl, int delay) {
         this.solenoids = solenoidsToControl;
+        this.delay = delay;
     }
 
     /*
