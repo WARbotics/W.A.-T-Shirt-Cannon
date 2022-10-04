@@ -7,7 +7,7 @@ public class Cannon {
     private List<Solenoid> solenoids;
     private int delay;
 
-    /*
+    /**
     Initializes a controller with a list of solenoids and a delay in ms
 
     @param  solenoidsToControl  a list of controllable solenoids
@@ -18,7 +18,7 @@ public class Cannon {
         this.delay = delay;
     }
 
-    /*
+    /**
     Initializes a controller with a list of solenoids and a default delay of 400 ms
 
     @param  solenoidsToControl  a list of controllable solenoids
@@ -27,7 +27,7 @@ public class Cannon {
         this(solenoidsToControl, 400);
     }
 
-    /*
+    /**
     Fires a solenoid with an index passed by parameter
 
     @param  index  the index of the solenoid to fire
@@ -38,7 +38,7 @@ public class Cannon {
         s.startPulse();
     }
 
-    /*
+    /**
     Fires all solenoids associated with this cannon controller
     */
     public void fireAllSolenoids() {
