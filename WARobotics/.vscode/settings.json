@@ -28,7 +28,9 @@
   "java.test.defaultConfig": "WPIlibUnitTests",
   "cSpell.words": [
     "AHRS",
+    "CTREPCM",
     "deadband",
+    "joypad",
     "navx",
     "teleop",
     "teleoperated"
