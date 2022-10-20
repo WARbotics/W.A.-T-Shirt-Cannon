@@ -8,25 +8,15 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import frc.robot.components.Drivetrain;
-import frc.robot.components.OI;
-import frc.robot.components.OI.DriveMode;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
-
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import frc.robot.components.Cannon;
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -36,11 +26,7 @@ import frc.robot.components.Cannon;
  * project.
  */
 public class Robot extends TimedRobot {
-
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private OI input; 
-  private AHRS navX;
+  private Joystick controller;
   private Drivetrain drive;
   private Cannon cannon;
 
@@ -51,21 +37,23 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-
     //Drivetrain
-    drive = new Drivetrain(new WPI_TalonSRX(1), new WPI_TalonSRX(2), new WPI_VictorSPX(3), new WPI_VictorSPX(4), navX);
+    this.drive = new Drivetrain(
+      new PWMSparkMax(0),
+      new PWMSparkMax(1),
+      new PWMSparkMax(2),
+      new PWMSparkMax(3)
+    );
 
     // Input
-    Joystick driveStick = new Joystick(0);
-    Joystick operator = new Joystick(1);
-    input = new OI(driveStick, operator);
+    this.controller = new Joystick(0);
 
     List<Solenoid> solenoids = new ArrayList<Solenoid>();
     solenoids.add(new Solenoid(PneumaticsModuleType.CTREPCM, 0));
     solenoids.add(new Solenoid(PneumaticsModuleType.CTREPCM, 1));
     solenoids.add(new Solenoid(PneumaticsModuleType.CTREPCM, 2));
     
-    cannon = new Cannon(solenoids);
+    this.cannon = new Cannon(solenoids);
 
   }
 
@@ -78,131 +66,71 @@ public class Robot extends TimedRobot {
    * LiveWindow and SmartDashboard integrated updating.
    */
   @Override
-  public void robotPeriodic() {
-  }
+  public void robotPeriodic() {}
 
-  /**
-   * This autonomous (along with the chooser code above) shows how to select
-   * between different autonomous modes using the dashboard. The sendable
-   * chooser code works with the Java SmartDashboard. If you prefer the
-   * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-   * getString line to get the auto name from the text box below the Gyro
-   *
-   * <p>You can add additional auto modes by adding additional comparisons to
-   * the switch structure below with additional strings. If using the
-   * SendableChooser make sure to add them to the chooser code above as well.
-   */
   @Override
-  public void autonomousInit() {
-    
-    m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
-    drive.resetOdomentry(new Pose2d());
-  }
+  public void autonomousInit() {}
 
   /**
    * This function is called periodically during autonomous.
    */
   @Override
-  public void autonomousPeriodic() {
-    
-  }
+  public void autonomousPeriodic() {}
 
   /**
    * This function is called once when teleop is enabled.
    */
   @Override
-  public void teleopInit() {
-  }
+  public void teleopInit() {}
 
   /**
    * This function is called periodically during operator control.
    */
   @Override
   public void teleopPeriodic() {
-    double driveY = -input.driver.getRawAxis(1);
-    double zRotation = input.driver.getRawAxis(2);
-    double rightDriveY = input.driver.getRawAxis(3);
-    SmartDashboard.putString("Drivemode", input.getDriveMode().name()); // What is the current driving mode 
-    // Driving Modes logic
-    if (input.getDriveMode() == DriveMode.SPEED) {
-      drive.drive.arcadeDrive(driveY, zRotation);
-      // Speed
-    } else if (input.getDriveMode() == DriveMode.PRECISION) {
-      // Double check that they are the right controls
-      // Precision
-      drive.drive.tankDrive(driveY * .70, -rightDriveY * .70);
-      // make turning senetive but forward about .50
-    } else {
-      drive.drive.arcadeDrive(driveY*.70, zRotation*.70);
-    }
+    double x = controller.getRawAxis(4);
+    double z = controller.getRawAxis(3);
 
-    // Driving modes
-    if (input.driver.getRawButton(1)) {
-      // Set Speed Mode
-      /*
-      *when we press button 1 the robot goes into speed mood
-      */
-      input.setDriveMode(DriveMode.SPEED);      
-    } else if (input.driver.getRawButton(2)) {
-      // Precision
-      /*
-      *when we press button 2 the robot goes into precision mode.
-      */
-      input.setDriveMode(DriveMode.PRECISION);
-    } else if (input.driver.getRawButton(3)) {
-      // Default
-      /*
-      *when we press button 3 the robot goes into a defulat drive mode.
-      */
-      input.setDriveMode(DriveMode.DEFAULT);
-    }
+    drive.drive.arcadeDrive(x, z);
 
-    double axisOne = input.driver.getRawAxis(1);
-    double axisTwo = input.driver.getRawAxis(2);
+    double axisOne = controller.getRawAxis(1);
+    double axisTwo = controller.getRawAxis(2);
     
-    if (axisOne == -1) {
+    // Gets the direction that the joypad is being pushed
+    // It returns by axis instead of by button so we check directions via a threshold
+    if (axisOne < -0.2) {
       this.cannon.fireSolenoid(1);
-    } else if (axisTwo == 1) {
+    } else if (axisTwo > 0.2) {
       this.cannon.fireSolenoid(0);
-    } else if (axisTwo == -1) {
+    } else if (axisTwo < -0.2) {
       this.cannon.fireSolenoid(2);
-    } else if (axisOne == 1) {
+    } else if (axisOne > 0.2) {
       this.cannon.fireAllSolenoids();
     }
-    
-
   }
-
 
   /**
    * This function is called once when the robot is disabled.
    */
   @Override
-  public void disabledInit() {
-  }
+  public void disabledInit() {}
 
   /**
    * This function is called periodically when disabled.
    */
   @Override
-  public void disabledPeriodic() {
-  }
+  public void disabledPeriodic() {}
 
   /**
    * This function is called once when test mode is enabled.
    */
   @Override
-  public void testInit() {
-  }
+  public void testInit() {}
 
   /**
    * This function is called periodically during test mode.
    */
   @Override
-  public void testPeriodic() {
-
-  }
+  public void testPeriodic() {}
 
 }
