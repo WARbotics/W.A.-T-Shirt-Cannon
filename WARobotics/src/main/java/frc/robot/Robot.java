@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import frc.robot.components.Cannon;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -37,13 +38,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-    //Drivetrain
+    // Drivetrain
     this.drive = new Drivetrain(
-      new PWMSparkMax(0),
-      new PWMSparkMax(1),
-      new PWMSparkMax(2),
-      new PWMSparkMax(3)
-    );
+        new PWMSparkMax(0),
+        new PWMSparkMax(1),
+        new PWMSparkMax(2),
+        new PWMSparkMax(3));
 
     // Input
     this.controller = new Joystick(0);
@@ -52,7 +52,7 @@ public class Robot extends TimedRobot {
     solenoids.add(new Solenoid(PneumaticsModuleType.CTREPCM, 0));
     solenoids.add(new Solenoid(PneumaticsModuleType.CTREPCM, 1));
     solenoids.add(new Solenoid(PneumaticsModuleType.CTREPCM, 2));
-    
+
     this.cannon = new Cannon(solenoids);
 
   }
@@ -62,26 +62,31 @@ public class Robot extends TimedRobot {
    * this for items like diagnostics that you want ran during disabled,
    * autonomous, teleoperated and test.
    *
-   * <p>This runs after the mode specific periodic functions, but before
+   * <p>
+   * This runs after the mode specific periodic functions, but before
    * LiveWindow and SmartDashboard integrated updating.
    */
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+  }
 
   @Override
-  public void autonomousInit() {}
+  public void autonomousInit() {
+  }
 
   /**
    * This function is called periodically during autonomous.
    */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
   /**
    * This function is called once when teleop is enabled.
    */
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+  }
 
   /**
    * This function is called periodically during operator control.
@@ -95,9 +100,10 @@ public class Robot extends TimedRobot {
 
     double axisOne = controller.getRawAxis(1);
     double axisTwo = controller.getRawAxis(2);
-    
+
     // Gets the direction that the joypad is being pushed
-    // It returns by axis instead of by button so we check directions via a threshold
+    // It returns by axis instead of by button so we check directions via a
+    // threshold
     if (axisOne < -0.2) {
       this.cannon.fireSolenoid(1);
     } else if (axisTwo > 0.2) {
@@ -113,24 +119,28 @@ public class Robot extends TimedRobot {
    * This function is called once when the robot is disabled.
    */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+  }
 
   /**
    * This function is called periodically when disabled.
    */
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+  }
 
   /**
    * This function is called once when test mode is enabled.
    */
   @Override
-  public void testInit() {}
+  public void testInit() {
+  }
 
   /**
    * This function is called periodically during test mode.
    */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 
 }

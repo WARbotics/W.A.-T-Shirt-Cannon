@@ -1,4 +1,5 @@
 package frc.robot.components;
+
 import java.util.List;
 
 import edu.wpi.first.wpilibj.Solenoid;
@@ -8,30 +9,32 @@ public class Cannon {
     private int delay;
 
     /**
-    Initializes a controller with a list of solenoids and a delay in ms
-
-    @param  solenoidsToControl  a list of controllable solenoids
-    @param  delay   the delay between opening and closing a solenoid, in milliseconds
-    */
+     * Initializes a controller with a list of solenoids and a delay in ms
+     * 
+     * @param solenoidsToControl a list of controllable solenoids
+     * @param delay              the delay between opening and closing a solenoid,
+     *                           in milliseconds
+     */
     public Cannon(List<Solenoid> solenoidsToControl, int delay) {
         this.solenoids = solenoidsToControl;
         this.delay = delay;
     }
 
     /**
-    Initializes a controller with a list of solenoids and a default delay of 400 ms
-
-    @param  solenoidsToControl  a list of controllable solenoids
-    */
+     * Initializes a controller with a list of solenoids and a default delay of 400
+     * ms
+     * 
+     * @param solenoidsToControl a list of controllable solenoids
+     */
     public Cannon(List<Solenoid> solenoidsToControl) {
         this(solenoidsToControl, 400);
     }
 
     /**
-    Fires a solenoid with an index passed by parameter
-
-    @param  index  the index of the solenoid to fire
-    */
+     * Fires a solenoid with an index passed by parameter
+     * 
+     * @param index the index of the solenoid to fire
+     */
     public void fireSolenoid(int index) {
         Solenoid s = this.solenoids.get(index);
         s.setPulseDuration(delay / 1000.0);
@@ -39,8 +42,8 @@ public class Cannon {
     }
 
     /**
-    Fires all solenoids associated with this cannon controller
-    */
+     * Fires all solenoids associated with this cannon controller
+     */
     public void fireAllSolenoids() {
         for (int i = 0; i < solenoids.size(); i++) {
             this.fireSolenoid(i);

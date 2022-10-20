@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import frc.robot.common.PID;
 
-
 /*
 *The Drivetrain controls the motors on the left and on the right. 
 *It also gives use values so we are able to make fully functioning autonomous.
@@ -19,48 +18,47 @@ public class Drivetrain {
     private double deadBand = 0.0;
     private PID PID = new PID(0.30, 0.00, 0.01);
     private double speed = 0;
-    private double rotation = 0; 
+    private double rotation = 0;
 
     public Drivetrain(
-        PWMSparkMax leftFront, 
-        PWMSparkMax leftRear, 
-        PWMSparkMax rightFront, 
-        PWMSparkMax rightRear
-    ) {
+            PWMSparkMax leftFront,
+            PWMSparkMax leftRear,
+            PWMSparkMax rightFront,
+            PWMSparkMax rightRear) {
         // Initializes controller groups for left and right sides
         this.left = new MotorControllerGroup(leftFront, leftRear);
         this.right = new MotorControllerGroup(rightFront, rightRear);
-        
+
         // Initializes the differential drive controller
         this.drive = new DifferentialDrive(left, right);
     }
 
     /**
-    * Sets the deadband for the drivetrain 
-    *
-    * @param deadBand the amount of deadband that will be applied to the drivetrain 
-    */
+     * Sets the deadband for the drivetrain
+     *
+     * @param deadBand the amount of deadband that will be applied to the drivetrain
+     */
     public void setDeadBand(double deadBand) {
         this.deadBand = deadBand;
     }
 
     /**
-    * Gets the speed for the drivetrain 
-    */
+     * Gets the speed for the drivetrain
+     */
     public double getSpeed() {
         return speed;
     }
 
     /*
-    * gets the rotation for the drivetrain
-    */
+     * gets the rotation for the drivetrain
+     */
     public double getRotation() {
         return rotation;
     }
 
     /*
-    * drives the robot in a curve
-    */
+     * drives the robot in a curve
+     */
     public void curveDrive(double speed, double rotation, boolean isQuickTurn) {
         if (Math.abs(speed) <= this.deadBand) {
             speed = 0;
@@ -75,18 +73,18 @@ public class Drivetrain {
     }
 
     /*
-    * runs tank drive via voltage
-    */
+     * runs tank drive via voltage
+     */
     public void tankDriveVolts(double leftVolts, double rightVolts) {
         left.setVoltage(leftVolts);
         right.setVoltage(-rightVolts);
         drive.feed();
-      }
+    }
 
     /*
-    * This gets average encoder distance
-    */     
-    public void tankDriveCustom(double leftSpeed, double rightSpeed){
+     * This gets average encoder distance
+     */
+    public void tankDriveCustom(double leftSpeed, double rightSpeed) {
         left.set(leftSpeed);
         right.set(-rightSpeed);
         drive.feed();

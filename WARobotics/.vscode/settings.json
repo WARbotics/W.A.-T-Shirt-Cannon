@@ -34,5 +34,12 @@
     "navx",
     "teleop",
     "teleoperated"
-  ]
+  ],
+  "java.format.settings.url": "./java-style.xml",
+  "commandOnAllFiles.commands": {
+    "Format File": {
+      "command": "editor.action.formatDocument",
+      "includeFileExtensions": [".java"]
+    }
+  }
 }
