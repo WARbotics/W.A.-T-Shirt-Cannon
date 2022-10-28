@@ -93,24 +93,24 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    double x = controller.getRawAxis(4);
+    double x = -controller.getRawAxis(2);
     double z = controller.getRawAxis(3);
 
     drive.drive.arcadeDrive(x, z);
 
-    double axisOne = controller.getRawAxis(1);
-    double axisTwo = controller.getRawAxis(2);
+    double axisOne = controller.getRawAxis(5);
+    double axisTwo = controller.getRawAxis(6);
 
     // Gets the direction that the joypad is being pushed
     // It returns by axis instead of by button so we check directions via a
     // threshold
-    if (axisOne < -0.2) {
+    if (controller.getRawButtonPressed(4)) {
       this.cannon.fireSolenoid(1);
-    } else if (axisTwo > 0.2) {
+    } else if (controller.getRawButtonPressed(1)) {
       this.cannon.fireSolenoid(0);
-    } else if (axisTwo < -0.2) {
+    } else if (controller.getRawButtonPressed(3)) {
       this.cannon.fireSolenoid(2);
-    } else if (axisOne > 0.2) {
+    } else if (controller.getRawButtonPressed(2)) {
       this.cannon.fireAllSolenoids();
     }
   }
