@@ -4,21 +4,29 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
+
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Cannon;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
- */
+ */  
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  private XboxController xboxController;
 
   private RobotContainer m_robotContainer;
-
+  private Cannon cannon;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -28,6 +36,13 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    xboxController = new XboxController(0);
+    ArrayList<Solenoid> solenoids = new ArrayList<Solenoid>();
+    solenoids.add(new Solenoid(PneumaticsModuleType.CTREPCM, 0));
+    solenoids.add(new Solenoid(PneumaticsModuleType.CTREPCM, 1));
+    solenoids.add(new Solenoid(PneumaticsModuleType.CTREPCM, 2));
+    cannon = new Cannon(solenoids);
+    
   }
 
   /**
@@ -45,6 +60,7 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
   }
+
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
@@ -81,7 +97,20 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    if(xboxController.getAButton()){
+      cannon.fireSolenoid(0);
+    }
+    else if(xboxController.getBButton()){
+      cannon.fireSolenoid(1);
+    }
+    else if(xboxController.getXButton()){
+      cannon.fireSolenoid(2);
+    }
+    else if(xboxController.getYButton()){
+      cannon.fireAllSolenoids();
+    }
+  }
 
   @Override
   public void testInit() {
